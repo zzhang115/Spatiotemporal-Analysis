@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Reducer: Input to the reducer is the output from the mapper. It receives
@@ -16,6 +17,8 @@ import java.util.List;
  * <word, total count> pairs.
  */
 public class SnowDepthReducer extends Reducer<Text, Text, Text, DoubleWritable> {
+    final static Logger logger = Logger.getLogger("SnowDepthReducer");
+
     private class Node {
         String geoHash;
         double snowDepth;
@@ -32,13 +35,11 @@ public class SnowDepthReducer extends Reducer<Text, Text, Text, DoubleWritable> 
         while (iterator.hasNext()) {
             String value = iterator.next().toString();
             String geoHash = value.trim().split(":")[0];
-            Double snowDepth = Double.parseDouble(value.trim().split(":")[1]);
-            System.out.println(geoHash + ":" + snowDepth);
+            double snowDepth = Double.parseDouble(value.trim().split(":")[1]);
+
+            logger.info(geoHash + ":" + snowDepth);
             nodes.add(new Node(geoHash, snowDepth));
-//                context.write(new Text(geoHash), new DoubleWritable(snowDepth));
-//                queue.offer(new Node(geoHash, snowDepth));
         }
-//            context.write(new Text("TotalLine: "), new DoubleWritable(0.07234));
         System.out.println("size: " + nodes.size());
         for (Node node : nodes) {
             System.out.println("node");
