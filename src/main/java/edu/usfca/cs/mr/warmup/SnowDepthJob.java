@@ -49,7 +49,7 @@ public class SnowDepthJob {
             job.waitForCompletion(true);
 
             sortSnowDepth(new File(args[1]));
-            writeResultToFile(args[1] + "result");
+            writeResultToFile(args[1] + "/result");
             System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -82,7 +82,7 @@ public class SnowDepthJob {
     }
 
     public static void sortSnowDepth(File dir) {
-        if (dir.exists()) {
+        if (dir.isDirectory()) {
             for (File file : dir.listFiles()) {
                 try {
                     BufferedReader fileReader = new BufferedReader(new FileReader(file));
