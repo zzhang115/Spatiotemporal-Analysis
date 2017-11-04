@@ -14,7 +14,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -27,7 +26,7 @@ public class CountLine {
     public static class CountLineMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            System.out.println(key.toString());
+            System.out.println(value.toString());
             context.write(new Text("A"), new IntWritable(1));
         }
     }
