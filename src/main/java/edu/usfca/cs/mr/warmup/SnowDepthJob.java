@@ -73,17 +73,6 @@ public class SnowDepthJob {
             // path to input in HDFS
             FileInputFormat.addInputPath(job, new Path(args[0]));
             // path to output in HDFS
-            File output = new File(args[1]);
-            logger.info("Output Dir: " + args[1]);
-            if (output.exists()) {
-                if (output.isDirectory()) {
-                    for (File file : output.listFiles()) {
-                        file.delete();
-                    }
-                }
-                output.delete();
-                logger.info("Deleting Output Dir");
-            }
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
             // Block until the job is completed.
             System.exit(job.waitForCompletion(true) ? 0 : 1);
