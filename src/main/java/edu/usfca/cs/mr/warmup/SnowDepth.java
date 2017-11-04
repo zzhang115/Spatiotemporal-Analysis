@@ -15,9 +15,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -50,28 +48,37 @@ public class SnowDepth {
     public static class SnowDepthMapper extends Mapper<LongWritable, Text, Text, Text> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            System.out.println(value.toString());
-            String geoHash = value.toString().split(".+")[1];
-            String snowDepth = value.toString().split(".+")[50];
-            System.out.println(geoHash + " " + snowDepth);
-            context.write(new Text("A"), new Text(geoHash + ":" + snowDepth));
-//            context.write(new Text("A"), new IntWritable(1));
-            context.write(new Text("A"), new Text("B"));
+//            System.out.println(value.toString());
+            String geoHash = value.toString().trim().split("\\s+")[1];
+            String snowDepthStr = value.toString().trim().split("\\s+")[50];
+//            System.out.println(geoHash + ":" + snowDepth);
+            Double snowDepth = Double.parseDouble(snowDepthStr);
+            if (snowDepth > 0) {
+                context.write(new Text("A"), new Text(geoHash + ":" + snowDepth));
+            }
         }
     }
 
     public static class SnowDepthReducer extends Reducer<Text, Text, Text, DoubleWritable> {
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+            List<Node> nodes = new ArrayList<Node>();
             Iterator<Text> iterator = values.iterator();
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                String geoHash = value.split(":")[0];
-                Double snowDepth = Double.parseDouble(value.split(":")[1]);
-                queue.offer(new Node(geoHash, snowDepth));
+                String geoHash = value.trim().split(":")[0];
+                Double snowDepth = Double.parseDouble(value.trim().split(":")[1]);
+                System.out.println(geoHash + ":" + snowDepth);
+                nodes.add(new Node(geoHash, snowDepth));
+//                context.write(new Text(geoHash), new DoubleWritable(snowDepth));
+//                queue.offer(new Node(geoHash, snowDepth));
             }
 //            context.write(new Text("TotalLine: "), new DoubleWritable(0.07234));
-            context.write(new Text(queue.peek().geoHash), new DoubleWritable(queue.peek().snowDepth));
+            System.out.println("size: " + nodes.size());
+            for (Node node : nodes) {
+                System.out.println("node");
+                context.write(new Text(node.geoHash), new DoubleWritable(node.snowDepth));
+            }
         }
     }
 
@@ -90,8 +97,8 @@ public class SnowDepth {
         job.setMapperClass(SnowDepthMapper.class);
         job.setCombinerClass(SnowDepthReducer.class);
         job.setReducerClass(SnowDepthReducer.class);
-//        job.setInputFormatClass(TextInputFormat.class);
-//        job.setOutputFormatClass(TextOutputFormat.class);
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
 
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
@@ -100,7 +107,6 @@ public class SnowDepth {
         job.setOutputValueClass(DoubleWritable.class);
 
         TextInputFormat.setInputPaths(job, new Path(inputDataDir));
-        System.out.println(inputDataDir);
         TextOutputFormat.setOutputPath(job, new Path(outputDataDir));
         job.waitForCompletion(true);
     }
