@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * Created by zzc on 11/3/17.
  */
 public class SnowDepthJob {
+    final static Logger logger = Logger.getLogger("SnowDepthJob");
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 //        String inputDataDir = args[0];
@@ -73,6 +74,7 @@ public class SnowDepthJob {
             FileInputFormat.addInputPath(job, new Path(args[0]));
             // path to output in HDFS
             File output = new File(args[1]);
+            logger.info("Output Dir: " + args[1]);
             if (output.exists()) {
                 if (output.isDirectory()) {
                     for (File file : output.listFiles()) {
@@ -80,6 +82,7 @@ public class SnowDepthJob {
                     }
                 }
                 output.delete();
+                logger.info("Deleting Output Dir");
             }
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
             // Block until the job is completed.
