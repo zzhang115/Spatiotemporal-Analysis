@@ -19,36 +19,6 @@ public class SnowDepthJob {
     final static Logger logger = Logger.getLogger("SnowDepthJob");
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-//        String inputDataDir = args[0];
-//        String outputDataDir = args[1];
-//
-//        File output3 = new File(outputDataDir);
-//        if (output3.exists()) {
-//            if (output3.isDirectory()) {
-//                for (File file : output3.listFiles()) {
-//                    file.delete();
-//                }
-//            }
-//            output3.delete();
-//        }
-//
-//        Configuration conf = new Configuration();
-//        Job job = Job.getInstance(conf);
-//        job.setMapperClass(SnowDepthMapper.class);
-//        job.setCombinerClass(SnowDepthReducer.class);
-//        job.setReducerClass(SnowDepthReducer.class);
-//        job.setInputFormatClass(TextInputFormat.class);
-//        job.setOutputFormatClass(TextOutputFormat.class);
-//
-//        job.setMapOutputKeyClass(Text.class);
-//        job.setMapOutputValueClass(Text.class);
-//
-//        job.setOutputKeyClass(Text.class);
-//        job.setOutputValueClass(DoubleWritable.class);
-//
-//        TextInputFormat.setInputPaths(job, new Path(inputDataDir));
-//        TextOutputFormat.setOutputPath(job, new Path(outputDataDir));
-//        job.waitForCompletion(true);
           try {
             Configuration conf = new Configuration();
             // Give the MapRed job a name. You'll see this name in the Yarn

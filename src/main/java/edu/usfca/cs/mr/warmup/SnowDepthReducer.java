@@ -18,7 +18,7 @@ import java.util.List;
 public class SnowDepthReducer extends Reducer<Text, Text, Text, DoubleWritable> {
     private class Node {
         String geoHash;
-        Double snowDepth;
+        double snowDepth;
         Node(String geoHash, Double snowDepth) {
             this.geoHash = geoHash;
             this.snowDepth = snowDepth;
