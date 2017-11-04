@@ -49,7 +49,7 @@ public class SnowDepthJob {
             job.waitForCompletion(true);
 
             sortSnowDepth(new File(args[1]));
-            writeResultToFile(args[1] + "/result");
+            writeResultToFile(args[2] + "/topsnowdepth");
             System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
