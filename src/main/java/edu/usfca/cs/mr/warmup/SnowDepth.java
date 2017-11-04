@@ -88,8 +88,12 @@ public class SnowDepth {
 
         File output3 = new File(outputDataDir);
         if (output3.exists()) {
-            logger.info("Output3 directory already exits!\tDelete previous directory.");
-            FileUtils.deleteDirectory(output3);
+            if (output3.isDirectory()) {
+                for (File file : output3.listFiles()) {
+                    file.delete();
+                }
+            }
+            output3.delete();
         }
 
         Configuration conf = new Configuration();
