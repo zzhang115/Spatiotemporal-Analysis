@@ -16,35 +16,17 @@ import java.util.logging.Logger;
  * word, list<count> pairs.  Sums up individual counts per given word. Emits
  * <word, total count> pairs.
  */
-public class SnowDepthReducer extends Reducer<Text, Text, Text, DoubleWritable> {
-    final static Logger logger = Logger.getLogger("SnowDepthReducer");
+public class SnowDepthReducer extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 
-    private class Node {
-        String geoHash;
-        double snowDepth;
-        Node(String geoHash, Double snowDepth) {
-            this.geoHash = geoHash;
-            this.snowDepth = snowDepth;
-        }
-    }
     @Override
-    protected void reduce(Text key, Iterable<Text> values, Context context)
+    protected void reduce(Text key, Iterable<DoubleWritable> values, Context context)
     throws IOException, InterruptedException {
-        List<Node> nodes = new ArrayList<Node>();
-        Iterator<Text> iterator = values.iterator();
+        Iterator<DoubleWritable> iterator = values.iterator();
+        Double snowDepthCount = 0.0;
         while (iterator.hasNext()) {
-            String value = iterator.next().toString();
-            String geoHash = value.trim().split(":")[0];
-            double snowDepth = Double.parseDouble(value.trim().split(":")[1]);
-
-            logger.info(geoHash + ":" + snowDepth);
-            nodes.add(new Node(geoHash, snowDepth));
+            snowDepthCount += iterator.next().get();
         }
-        System.out.println("size: " + nodes.size());
-        for (Node node : nodes) {
-            System.out.println("node");
-            context.write(new Text(node.geoHash), new DoubleWritable(node.snowDepth));
-        }
+        context.write(key, new DoubleWritable(snowDepthCount));
     }
 
 }

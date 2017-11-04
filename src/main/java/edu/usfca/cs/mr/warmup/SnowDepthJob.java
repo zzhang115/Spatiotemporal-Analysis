@@ -28,12 +28,12 @@ public class SnowDepthJob {
             // Mapper
             job.setMapperClass(SnowDepthMapper.class);
             // Combiner. We use the reducer as the combiner in this case.
-//            job.setCombinerClass(SnowDepthReducer.class);
+            job.setCombinerClass(SnowDepthReducer.class);
             // Reducer
             job.setReducerClass(SnowDepthReducer.class);
             // Outputs from the Mapper.
             job.setMapOutputKeyClass(Text.class);
-            job.setMapOutputValueClass(Text.class);
+            job.setMapOutputValueClass(DoubleWritable.class);
             // Outputs from Reducer. It is sufficient to set only the following
             // two properties if the Mapper and Reducer has same key and value
             // types. It is set separately for elaboration.
