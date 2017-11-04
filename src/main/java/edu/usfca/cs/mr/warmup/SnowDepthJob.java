@@ -8,7 +8,9 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 /**
@@ -44,13 +46,71 @@ public class SnowDepthJob {
             // path to output in HDFS
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
             // Block until the job is completed.
-            System.exit(job.waitForCompletion(true) ? 0 : 1);
+            job.waitForCompletion(true);
+
+            sortSnowDepth(new File(args[1]));
+            writeResultToFile(args[1] + "result");
+            System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (InterruptedException e) {
             System.err.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    private static PriorityQueue<Node> queue = new PriorityQueue<Node>(10, new Comparator<Node>() {
+        public int compare(Node a, Node b) {
+            if (a.snowDepth > b.snowDepth) {
+                return 1;
+            } else if (a.snowDepth < b.snowDepth) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    });
+
+    private static class Node {
+        String geoHash;
+        Double snowDepth;
+        Node(String geoHash, Double snowDepth) {
+            this.geoHash = geoHash;
+            this.snowDepth = snowDepth;
+        }
+    }
+
+    public static void sortSnowDepth(File dir) {
+        if (dir.exists()) {
+            for (File file : dir.listFiles()) {
+                try {
+                    BufferedReader fileReader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = fileReader.readLine()) != null) {
+                        String geoHash = line.split("\\s+")[0];
+                        Double snowDepth = Double.parseDouble(line.split("\\s+")[1]);
+                        queue.offer(new Node(geoHash, snowDepth));
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void writeResultToFile(String fileName) {
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            for (Node node : queue) {
+                fileWriter.write(node.geoHash + ":" + node.snowDepth);
+            }
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
