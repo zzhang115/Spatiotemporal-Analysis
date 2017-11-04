@@ -8,7 +8,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -29,7 +28,7 @@ public class SnowDepthJob {
             // Mapper
             job.setMapperClass(SnowDepthMapper.class);
             // Combiner. We use the reducer as the combiner in this case.
-            job.setCombinerClass(SnowDepthReducer.class);
+//            job.setCombinerClass(SnowDepthReducer.class);
             // Reducer
             job.setReducerClass(SnowDepthReducer.class);
             // Outputs from the Mapper.
