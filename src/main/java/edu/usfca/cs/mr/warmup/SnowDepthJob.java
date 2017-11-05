@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  */
 public class SnowDepthJob {
     final static Logger logger = Logger.getLogger("SnowDepthJob");
+    final static int TOPK = 10;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {
@@ -60,7 +61,7 @@ public class SnowDepthJob {
         }
     }
 
-    private static PriorityQueue<Node> queue = new PriorityQueue<Node>(10, new Comparator<Node>() {
+    private static PriorityQueue<Node> queue = new PriorityQueue<Node>(TOPK, new Comparator<Node>() {
         public int compare(Node a, Node b) {
             if (a.snowDepth > b.snowDepth) {
                 return 1;
@@ -84,6 +85,9 @@ public class SnowDepthJob {
     public static void sortSnowDepth(File dir) {
         if (dir.isDirectory()) {
             for (File file : dir.listFiles()) {
+                if (!file.getName().startsWith("part")) {
+                    continue;
+                }
                 try {
                     BufferedReader fileReader = new BufferedReader(new FileReader(file));
                     String line;
@@ -104,9 +108,13 @@ public class SnowDepthJob {
     public static void writeResultToFile(String fileName) {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
-            for (Node node : queue) {
-                fileWriter.write(node.geoHash + ":" + node.snowDepth);
+            int i = 0;
+            while (i < 10 && !queue.isEmpty()) {
+                Node node = queue.poll();
+                fileWriter.write(node.geoHash + ":" + node.snowDepth + "\n");
+                i++;
             }
+
             fileWriter.flush();
             fileWriter.close();
         } catch (IOException e) {
