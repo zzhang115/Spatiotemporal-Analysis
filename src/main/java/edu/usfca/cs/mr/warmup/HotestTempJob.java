@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 /**
  * Created by zzc on 11/3/17.
  */
-public class SnowDepthJob {
+public class HotestTempJob {
     final static Logger logger = Logger.getLogger("SnowDepthJob");
     final static int TOPK = 10;
 
@@ -27,7 +27,7 @@ public class SnowDepthJob {
             // webapp.
             Job job = Job.getInstance(conf, "SnowDepth job");
             // Current class.
-            job.setJarByClass(SnowDepthJob.class);
+            job.setJarByClass(HotestTempJob.class);
             // Mapper
             job.setMapperClass(SnowDepthMapper.class);
             // Combiner. We use the reducer as the combiner in this case.
