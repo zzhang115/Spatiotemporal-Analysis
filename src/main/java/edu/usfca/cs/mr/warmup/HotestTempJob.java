@@ -56,7 +56,7 @@ public class HotestTempJob {
                 }
             }
             System.out.println(geoHash + "&" + timeStamp + "&" + maxTemp);
-            context.write(new Text(geoHash + "-" + timeStamp), new Text(String.valueOf(maxTemp)));
+            context.write(new Text("Temp"), new Text(timeStamp + "&" + geoHash + "&" +  maxTemp));
         }
     }
 
