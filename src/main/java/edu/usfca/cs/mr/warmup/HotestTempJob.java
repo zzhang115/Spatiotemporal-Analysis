@@ -33,7 +33,7 @@ public class HotestTempJob {
             String geoHash = value.toString().split("\\s+")[1];
             String temp = value.toString().split("\\s+")[40];
             System.out.println(temp);
-            context.write(new Text("Temp"), new Text(timeStamp + "-" + geoHash + "-" + temp));
+            context.write(new Text("Temp"), new Text(timeStamp + "&" + geoHash + "&" + temp));
         }
     }
 
@@ -46,16 +46,16 @@ public class HotestTempJob {
             String timeStamp = "";
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                double temp = Double.parseDouble(value.split("-")[2]);
-                String timestamp = value.split("-")[0];
-                String geohash = value.split("-")[1];
+                double temp = Double.parseDouble(value.split("&")[2]);
+                String timestamp = value.split("&")[0];
+                String geohash = value.split("&")[1];
                 if (temp > maxTemp) {
                     maxTemp = temp;
                     timeStamp = timestamp;
                     geoHash = geohash;
                 }
             }
-            System.out.println(geoHash + "-" + timeStamp + "-" + maxTemp);
+            System.out.println(geoHash + "&" + timeStamp + "&" + maxTemp);
             context.write(new Text(geoHash + "-" + timeStamp), new Text(String.valueOf(maxTemp)));
         }
     }
