@@ -109,6 +109,7 @@ public class SnowDepthJob {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
             int i = 0;
+            logger.info("size: " + queue.size());
             while (i < 10 && !queue.isEmpty()) {
                 Node node = queue.poll();
                 fileWriter.write(node.geoHash + ":" + node.snowDepth + "\n");
