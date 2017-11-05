@@ -1,5 +1,6 @@
 package edu.usfca.cs.mr.warmup;
 
+import javafx.scene.layout.Priority;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
@@ -49,8 +50,7 @@ public class SnowDepthJob {
             // Block until the job is completed.
             job.waitForCompletion(true);
 
-            sortSnowDepth(new File(args[1]));
-            writeResultToFile(args[2] + "/topsnowdepth");
+            sortSnowDepth(new File(args[1]), args[2] + "/topsnowdepth");
             System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -61,7 +61,7 @@ public class SnowDepthJob {
         }
     }
 
-    private static PriorityQueue<Node> queue = new PriorityQueue<Node>(TOPK, new Comparator<Node>() {
+    private static class NodeComparator implements Comparator<Node> {
         public int compare(Node a, Node b) {
             if (a.snowDepth > b.snowDepth) {
                 return 1;
@@ -71,8 +71,7 @@ public class SnowDepthJob {
                 return 0;
             }
         }
-    });
-
+    }
     private static class Node {
         String geoHash;
         Double snowDepth;
@@ -82,7 +81,8 @@ public class SnowDepthJob {
         }
     }
 
-    public static void sortSnowDepth(File dir) {
+    public static void sortSnowDepth(File dir, String filename) {
+    PriorityQueue<Node> queue = new PriorityQueue<Node>(TOPK, new NodeComparator());
         if (dir.isDirectory()) {
             for (File file : dir.listFiles()) {
                 if (!file.getName().startsWith("part")) {
@@ -103,9 +103,10 @@ public class SnowDepthJob {
                 }
             }
         }
+        writeResultToFile(filename, queue);
     }
 
-    public static void writeResultToFile(String fileName) {
+    public static void writeResultToFile(String fileName, PriorityQueue<Node> queue) {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
             int i = 0;
