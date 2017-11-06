@@ -23,33 +23,38 @@ public class SnowDepthJob {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {
             Configuration conf = new Configuration();
-            // Give the MapRed job a name. You'll see this name in the Yarn
-            // webapp.
-            Job job = Job.getInstance(conf, "SnowDepth job");
-            // Current class.
-            job.setJarByClass(SnowDepthJob.class);
-            // Mapper
-            job.setMapperClass(SnowDepthMapper.class);
-            // Combiner. We use the reducer as the combiner in this case.
-            job.setCombinerClass(SnowDepthReducer.class);
-            // Reducer
-            job.setReducerClass(SnowDepthReducer.class);
-            // Outputs from the Mapper.
-            job.setMapOutputKeyClass(Text.class);
-            job.setMapOutputValueClass(DoubleWritable.class);
-            // Outputs from Reducer. It is sufficient to set only the following
-            // two properties if the Mapper and Reducer has same key and value
-            // types. It is set separately for elaboration.
-            job.setOutputKeyClass(Text.class);
-            job.setOutputValueClass(DoubleWritable.class);
-            // path to input in HDFS
-            FileInputFormat.addInputPath(job, new Path(args[0]));
-            // path to output in HDFS
-            FileOutputFormat.setOutputPath(job, new Path(args[1]));
-            // Block until the job is completed.
-            job.waitForCompletion(true);
+            Job job1 = Job.getInstance(conf, "SnowDepth job1");
+            job1.setJarByClass(SnowDepthJob.class);
+            job1.setMapperClass(SnowDepthMapper.SnowDepthMapper1.class);
 
-            sortSnowDepth(new File(args[1]), args[2] + "/topsnowdepth");
+            job1.setCombinerClass(SnowDepthReducer.SnowDepthReducer1.class);
+            job1.setReducerClass(SnowDepthReducer.SnowDepthReducer1.class);
+
+            job1.setMapOutputKeyClass(Text.class);
+            job1.setMapOutputValueClass(DoubleWritable.class);
+            job1.setOutputKeyClass(Text.class);
+            job1.setOutputValueClass(DoubleWritable.class);
+
+            FileInputFormat.addInputPath(job1, new Path(args[0]));
+            FileOutputFormat.setOutputPath(job1, new Path(args[1]));
+            job1.waitForCompletion(true);
+
+            Job job2 = Job.getInstance(conf, "SnowDepth job2");
+            job2.setJarByClass(SnowDepthJob.class);
+            job2.setMapperClass(SnowDepthMapper.SnowDepthMapper2.class);
+            // Combiner. We use the reducer as the combiner in this case.
+            job2.setCombinerClass(SnowDepthReducer.SnowDepthReducer2.class);
+            job2.setReducerClass(SnowDepthReducer.SnowDepthReducer2.class);
+
+            job2.setMapOutputKeyClass(Text.class);
+            job2.setMapOutputValueClass(Text.class);
+            job2.setOutputKeyClass(Text.class);
+            job2.setOutputValueClass(Text.class);
+
+            FileInputFormat.addInputPath(job2, new Path(args[1]));
+            FileOutputFormat.setOutputPath(job2, new Path(args[2]));
+            job2.waitForCompletion(true);
+
             System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -57,69 +62,6 @@ public class SnowDepthJob {
             System.err.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
-        }
-    }
-
-    private static class NodeComparator implements Comparator<Node> {
-        public int compare(Node a, Node b) {
-            if (a.snowDepth > b.snowDepth) {
-                return 1;
-            } else if (a.snowDepth < b.snowDepth) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-    }
-    private static class Node {
-        String geoHash;
-        Double snowDepth;
-        Node(String geoHash, Double snowDepth) {
-            this.geoHash = geoHash;
-            this.snowDepth = snowDepth;
-        }
-    }
-
-    public static void sortSnowDepth(File dir, String filename) {
-    PriorityQueue<Node> queue = new PriorityQueue<Node>(TOPK, new NodeComparator());
-        if (dir.isDirectory()) {
-            for (File file : dir.listFiles()) {
-                if (!file.getName().startsWith("part")) {
-                    continue;
-                }
-                try {
-                    BufferedReader fileReader = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = fileReader.readLine()) != null) {
-                        String geoHash = line.split("\\s+")[0];
-                        Double snowDepth = Double.parseDouble(line.split("\\s+")[1]);
-                        queue.offer(new Node(geoHash, snowDepth));
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        writeResultToFile(filename, queue);
-    }
-
-    public static void writeResultToFile(String fileName, PriorityQueue<Node> queue) {
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            int i = 0;
-            logger.info("size: " + queue.size());
-            while (i < 10 && !queue.isEmpty()) {
-                Node node = queue.poll();
-                fileWriter.write(node.geoHash + ":" + node.snowDepth + "\n");
-                i++;
-            }
-
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
