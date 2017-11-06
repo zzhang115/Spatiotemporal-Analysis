@@ -27,11 +27,11 @@ public class SnowDepthMapper {
         }
     }
 
-    public static class SnowDepthMapper2 extends Mapper<Text, DoubleWritable, Text, Text> {
+    public static class SnowDepthMapper2 extends Mapper<LongWritable, Text, Text, Text> {
         @Override
-        protected void map (Text key, DoubleWritable value, Context context)
+        protected void map (LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-            context.write(new Text("SnowDepth"), new Text(key + "&" + value));
+            context.write(new Text("SnowDepth"), value);
         }
     }
 }
