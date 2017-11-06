@@ -58,8 +58,8 @@ public class SnowDepthReducer {
 
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                String geohash = value.split(".+")[0];
-                Double snowdepth = Double.parseDouble(value.split(".+")[1]);
+                String geohash = value.split("\\s+")[0];
+                Double snowdepth = Double.parseDouble(value.split("\\s+")[1]);
                 queue.offer(new Node(geohash, snowdepth));
             }
             for (int i = 0; i < 10; i++) {

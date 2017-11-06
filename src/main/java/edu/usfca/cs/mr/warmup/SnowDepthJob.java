@@ -35,6 +35,14 @@ public class SnowDepthJob {
             job1.setOutputKeyClass(Text.class);
             job1.setOutputValueClass(DoubleWritable.class);
 
+            File output1 = new File(args[1]);
+            if (output1.isDirectory()) {
+                for (File file : output1.listFiles()) {
+                    file.delete();
+                }
+                output1.delete();
+            }
+
             FileInputFormat.addInputPath(job1, new Path(args[0]));
             FileOutputFormat.setOutputPath(job1, new Path(args[1]));
             job1.waitForCompletion(true);
@@ -50,6 +58,14 @@ public class SnowDepthJob {
             job2.setMapOutputValueClass(Text.class);
             job2.setOutputKeyClass(Text.class);
             job2.setOutputValueClass(Text.class);
+
+            File output2 = new File(args[2]);
+            if (output1.isDirectory()) {
+                for (File file : output1.listFiles()) {
+                    file.delete();
+                }
+                output2.delete();
+            }
 
             FileInputFormat.addInputPath(job2, new Path(args[1]));
             FileOutputFormat.setOutputPath(job2, new Path(args[2]));
