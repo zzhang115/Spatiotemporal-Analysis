@@ -9,8 +9,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.*;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 /**
@@ -51,7 +49,7 @@ public class SnowDepthJob {
             job2.setJarByClass(SnowDepthJob.class);
             job2.setMapperClass(SnowDepthMapper.SnowDepthMapper2.class);
             // Combiner. We use the reducer as the combiner in this case.
-            job2.setCombinerClass(SnowDepthReducer.SnowDepthReducer2.class);
+//            job2.setCombinerClass(SnowDepthReducer.SnowDepthReducer2.class);
             job2.setReducerClass(SnowDepthReducer.SnowDepthReducer2.class);
 
             job2.setMapOutputKeyClass(Text.class);

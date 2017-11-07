@@ -22,7 +22,11 @@ public class SnowDepthReducer {
             Iterator<DoubleWritable> iterator = values.iterator();
             Double snowDepthCount = 0.0;
             while (iterator.hasNext()) {
-                snowDepthCount += iterator.next().get();
+                Double temp = iterator.next().get();
+                if (temp == 0) {
+                    return;
+                }
+                snowDepthCount += temp;
             }
             context.write(key, new DoubleWritable(snowDepthCount));
         }
@@ -58,11 +62,19 @@ public class SnowDepthReducer {
 
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                String geohash = value.split("\\s+")[0];
-                Double snowdepth = Double.parseDouble(value.split("\\s+")[1]);
-                queue.offer(new Node(geohash, snowdepth));
+                String geohash = value.split("\t")[0];
+                Double snowdepth = Double.parseDouble(value.split("\t")[1]);
+                if (queue.size() < 10) {
+                    queue.offer(new Node(geohash, snowdepth));
+                } else {
+                    if (snowdepth > queue.peek().snowDepth) {
+                        queue.poll();
+                        queue.offer(new Node(geohash, snowdepth));
+                    }
+                }
             }
-            for (int i = 0; i < 10; i++) {
+            System.out.println(queue.size());
+            while (!queue.isEmpty()){
                 Node node = queue.poll();
                 context.write(new Text(node.geoHash), new Text(node.snowDepth.toString()));
             }

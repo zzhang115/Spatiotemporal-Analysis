@@ -18,12 +18,10 @@ public class SnowDepthMapper {
         @Override
         protected void map (LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-            String geoHash = value.toString().trim().split("\\s+")[1];
-            String snowDepthStr = value.toString().trim().split("\\s+")[50];
+            String geoHash = value.toString().trim().split("\t")[1];
+            String snowDepthStr = value.toString().trim().split("\t")[50];
             Double snowDepth = Double.parseDouble(snowDepthStr);
-            if (snowDepth > 0) {
-                context.write(new Text(geoHash), new DoubleWritable(snowDepth));
-            }
+            context.write(new Text(geoHash), new DoubleWritable(snowDepth));
         }
     }
 
@@ -31,7 +29,11 @@ public class SnowDepthMapper {
         @Override
         protected void map (LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-            context.write(new Text("SnowDepth"), value);
+            String val = value.toString();
+            String geoHash = val.split("\t+")[0];
+            String snowDepth = val.split("\t+")[1];
+
+            context.write(new Text("SnowDepth"), new Text(geoHash + "\t" + snowDepth));
         }
     }
 }

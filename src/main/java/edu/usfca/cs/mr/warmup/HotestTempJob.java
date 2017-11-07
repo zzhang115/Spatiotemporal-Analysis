@@ -56,37 +56,27 @@ public class HotestTempJob {
                 }
             }
             System.out.println(geoHash + "&" + timeStamp + "&" + maxTemp);
-            context.write(new Text("Temp"), new Text(timeStamp + "&" + geoHash + "&" +  maxTemp));
+            context.write(new Text("Temp"), new Text(timeStamp + " " + geoHash + " " +  maxTemp));
         }
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {
             Configuration conf = new Configuration();
-            // Give the MapRed job a name. You'll see this name in the Yarn
-            // webapp.
             Job job = Job.getInstance(conf, "SnowDepth job");
-            // Current class.
             job.setJarByClass(HotestTempJob.class);
-            // Mapper
             job.setMapperClass(HotestTempMapper.class);
-            // Combiner. We use the reducer as the combiner in this case.
             job.setCombinerClass(HotestTempReducer.class);
-            // Reducer
             job.setReducerClass(HotestTempReducer.class);
-            // Outputs from the Mapper.
+
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(Text.class);
-            // Outputs from Reducer. It is sufficient to set only the following
-            // two properties if the Mapper and Reducer has same key and value
-            // types. It is set separately for elaboration.
+
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
-            // path to input in HDFS
+
             FileInputFormat.addInputPath(job, new Path(args[0]));
-            // path to output in HDFS
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
-            // Block until the job is completed.
             job.waitForCompletion(true);
 
             System.exit(0);
