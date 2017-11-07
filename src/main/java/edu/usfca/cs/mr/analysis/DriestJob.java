@@ -16,10 +16,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.PriorityQueue;
 
 /**
  * Created by zzc on 11/3/17.
@@ -49,7 +47,6 @@ public class DriestJob {
             SpatialRange range = Geohash.decodeHash(geoHash);
 
             if (isWithinBayArea(range)) {
-                System.out.println("bay area");
                 context.write(new IntWritable(month), new DoubleWritable(Double.parseDouble(humidity)));
             }
         }
@@ -70,10 +67,7 @@ public class DriestJob {
     public static class DriestMapper2 extends Mapper<LongWritable, Text, Text, Text> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            String geoHash = value.toString().split("\t")[0];
-            Double lighting = Double.parseDouble(value.toString().split("\t")[1]);
-
-            context.write(new Text("Driest"), new Text(geoHash + "\t" + lighting));
+            context.write(new Text("Driest"), value);
         }
     }
 
@@ -81,49 +75,19 @@ public class DriestJob {
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             Iterator<Text> iterator = values.iterator();
-            PriorityQueue<Node> queue = new PriorityQueue<>(3, new NodeComparator());
+            int month = 0;
+            double humidity = Double.MAX_VALUE;
 
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                String geoHash = value.split("\t")[0];
-                Double lighting = Double.parseDouble(value.split("\t")[1]);
-
-                if (queue.size() < 3) {
-                    queue.offer(new Node(geoHash, lighting));
-                } else {
-                    if (lighting > queue.peek().lighting) {
-                        queue.poll();
-                        queue.offer(new Node(geoHash, lighting));
-                    }
+                int monthTemp = Integer.parseInt(value.split("\t")[0]);
+                double humidityTemp = Double.parseDouble(value.split("\t")[1]);
+                if (humidityTemp < humidity) {
+                    month = monthTemp;
+                    humidity = humidityTemp;
                 }
             }
-
-            System.out.println(queue.size());
-            while (!queue.isEmpty()) {
-                Node node = queue.poll();
-                context.write(new Text(node.geoHash), new Text(node.lighting.toString()));
-            }
-        }
-    }
-
-    private static class NodeComparator implements Comparator<Node> {
-        public int compare(Node a, Node b) {
-            if (a.lighting > b.lighting) {
-                return 1;
-            } else if (a.lighting < b.lighting) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-    }
-
-    private static class Node {
-        String geoHash;
-        Double lighting;
-        Node(String geoHash, Double lighting) {
-            this.geoHash = geoHash;
-            this.lighting = lighting;
+            context.write(new Text(String.valueOf(month)), new Text(String.valueOf(humidity)));
         }
     }
 
@@ -153,31 +117,31 @@ public class DriestJob {
                 FileInputFormat.addInputPath(job1, new Path(args[0]));
                 FileOutputFormat.setOutputPath(job1, new Path(args[1]));
                 job1.waitForCompletion(true);
-//
-//            Job job2 = Job.getInstance(conf, "Driest Job2");
-//            job2.setJarByClass(DriestJob.class);
-//            job2.setMapperClass(DriestMapper2.class);
-//            // Combiner. We use the reducer as the combiner in this case.
-//            job2.setReducerClass(DriestReducer2.class);
-//
-//            job2.setMapOutputKeyClass(Text.class);
-//            job2.setMapOutputValueClass(Text.class);
-//            job2.setOutputKeyClass(Text.class);
-//            job2.setOutputValueClass(Text.class);
-//
-//            File output2 = new File(args[2]);
-//            if (output2.isDirectory()) {
-//                for (File file : output2.listFiles()) {
-//                    file.delete();
-//                }
-//                output2.delete();
-//            }
-//
-//            FileInputFormat.addInputPath(job2, new Path(args[1]));
-//            FileOutputFormat.setOutputPath(job2, new Path(args[2]));
-//            job2.waitForCompletion(true);
 
-                System.exit(0);
+                Job job2 = Job.getInstance(conf, "Driest Job2");
+                job2.setJarByClass(DriestJob.class);
+                job2.setMapperClass(DriestMapper2.class);
+                // Combiner. We use the reducer as the combiner in this case.
+                job2.setReducerClass(DriestReducer2.class);
+
+                job2.setMapOutputKeyClass(Text.class);
+                job2.setMapOutputValueClass(Text.class);
+                job2.setOutputKeyClass(Text.class);
+                job2.setOutputValueClass(Text.class);
+
+                File output2 = new File(args[2]);
+                if (output2.isDirectory()) {
+                    for (File file : output2.listFiles()) {
+                        file.delete();
+                    }
+                    output2.delete();
+                }
+
+                FileInputFormat.addInputPath(job2, new Path(args[1]));
+                FileOutputFormat.setOutputPath(job2, new Path(args[2]));
+                job2.waitForCompletion(true);
+
+              System.exit(0);
           } catch (IOException e) {
             System.err.println(e.getMessage());
           } catch (InterruptedException e) {
