@@ -60,8 +60,8 @@ public class SnowDepthJob {
             job2.setOutputValueClass(Text.class);
 
             File output2 = new File(args[2]);
-            if (output1.isDirectory()) {
-                for (File file : output1.listFiles()) {
+            if (output2.isDirectory()) {
+                for (File file : output2.listFiles()) {
                     file.delete();
                 }
                 output2.delete();
