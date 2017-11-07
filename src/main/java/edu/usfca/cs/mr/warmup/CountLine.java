@@ -21,12 +21,10 @@ import java.util.Iterator;
  * Created by zzc on 11/3/17.
  */
 public class CountLine {
-    final static Logger logger = Logger.getLogger(CountLine.class);
 
     public static class CountLineMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            System.out.println(value.toString());
             context.write(new Text("A"), new IntWritable(1));
         }
     }
@@ -48,18 +46,19 @@ public class CountLine {
         String inputDataDir = args[0];
         String outputDataDir = args[1];
 
-        File output2 = new File(outputDataDir);
-        if (output2.exists()) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Output2 directory already exits!\tDelete previous directory.");
+        File output1 = new File(outputDataDir);
+        if (output1.isDirectory()) {
+            for (File file : output1.listFiles()) {
+                file.delete();
             }
-            FileUtils.deleteDirectory(output2);
+            output1.delete();
         }
 
         Configuration conf= new Configuration();
         Job job = Job.getInstance(conf);
         job.setMapperClass(CountLineMapper.class);
         job.setReducerClass(CountLineReducer.class);
+
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setOutputKeyClass(Text.class);

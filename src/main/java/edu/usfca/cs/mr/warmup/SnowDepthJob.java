@@ -15,8 +15,6 @@ import java.util.logging.Logger;
  * Created by zzc on 11/3/17.
  */
 public class SnowDepthJob {
-    final static Logger logger = Logger.getLogger("SnowDepthJob");
-    final static int TOPK = 10;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {

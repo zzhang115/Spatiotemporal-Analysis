@@ -23,16 +23,13 @@ import java.util.logging.Logger;
  */
 
 public class HotestTempJob {
-    final static Logger logger = Logger.getLogger("HotestTempJob");
 
     public static class HotestTempMapper extends Mapper<LongWritable, Text, Text, Text> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            System.out.println(value.toString());
             String timeStamp = value.toString().split("\\s+")[0];
             String geoHash = value.toString().split("\\s+")[1];
             String temp = value.toString().split("\\s+")[40];
-            System.out.println(temp);
             context.write(new Text("Temp"), new Text(timeStamp + "&" + geoHash + "&" + temp));
         }
     }
@@ -55,15 +52,14 @@ public class HotestTempJob {
                     geoHash = geohash;
                 }
             }
-            System.out.println(geoHash + "&" + timeStamp + "&" + maxTemp);
-            context.write(new Text("Temp"), new Text(timeStamp + " " + geoHash + " " +  maxTemp));
+            context.write(new Text("Temp"), new Text(timeStamp + "&" + geoHash + "&" +  maxTemp));
         }
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {
             Configuration conf = new Configuration();
-            Job job = Job.getInstance(conf, "SnowDepth job");
+            Job job = Job.getInstance(conf, "HotestTemp Job");
             job.setJarByClass(HotestTempJob.class);
             job.setMapperClass(HotestTempMapper.class);
             job.setCombinerClass(HotestTempReducer.class);
@@ -74,6 +70,14 @@ public class HotestTempJob {
 
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
+
+            File output1 = new File(args[1]);
+            if (output1.isDirectory()) {
+                for (File file : output1.listFiles()) {
+                    file.delete();
+                }
+                output1.delete();
+            }
 
             FileInputFormat.addInputPath(job, new Path(args[0]));
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
