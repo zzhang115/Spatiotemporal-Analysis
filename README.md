@@ -15,7 +15,7 @@ Important: many of the questions are answered with a time or location. You shoul
 Warm-up
 (All of my MapReduce job based on 30% dataset and ran on my local machine)
 [0.5 pt] How many records are in the dataset?
-  number of records: 108,000,000;
+  number of records: 108,000,000;<br>
   time: 14mins;
 [0.5 pt] Are there any Geohashes that have snow depths greater than zero for the entire year? List some of the top Geohashes.
   
