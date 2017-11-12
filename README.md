@@ -50,6 +50,18 @@ Important: many of the questions are answered with a time or location. You shoul
 Bay area latitute range: 37.265 ~ 38.505
 Bay area longitute range: -123.041 ~ -121.624
 
+11	48.59431709646609
+10	37.67203172381619
+6	35.276764282285164
+3	34.376626506024095
+9	31.999531835205993
+0	30.872579918955424
+4	29.898496240601503
+8	29.650402761795167
+1	27.88864734299517
+5	24.987464522232735
+7	23.098756400877836
+2	22.470802919708028
 
 #### [3 pt] After graduating from USF, you found a startup that aims to provide personalized travel itineraries using big data analysis. Given your own personal preferences, build a plan for a year of travel across 5 locations. Or, in other words: pick 5 regions. What is the best time of year to visit them based on the dataset?<br>
 #### [3 pt] Your travel startup is so successful that you move on to green energy; here, you want to help power companies plan out the locations of solar and wind farms across North America. Write a MapReduce job that locates the top 3 places for solar and wind farms, as well as a combination of both (solar + wind farm). You will report a total of 9 Geohashes as well as their relevant attributes (for example, cloud cover and wind speeds).<br>
