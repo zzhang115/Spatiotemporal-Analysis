@@ -20,8 +20,8 @@ Important: many of the questions are answered with a time or location. You shoul
 * time: 14 mins;<br>
 
 #### [0.5 pt] Are there any Geohashes that have snow depths greater than zero for the entire year? List some of the top Geohashes.<br>
->There are totally 3 Geohashes that have snow depths greater than zero every month for the entire year.
-* Geohash       Snow Depth(Total depth for the entire year)
+>There are totally 3 Geohashes that have snow depths greater than zero every month for the entire year.<br>
+`Geohash        SnowDepth(Total depth for the entire year)`
 * c1gyqex11wpb	204.92590054059997
 * c1p5fmbjmkrz	331.1013611540598
 * c41xurr50ypb	590.0980625404601
