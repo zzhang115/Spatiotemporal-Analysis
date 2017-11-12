@@ -38,7 +38,6 @@ public class CountLine {
                 count += iterator.next().get();
             }
             context.write(new Text("TotalLine: "), new IntWritable(count));
-
         }
     }
 
