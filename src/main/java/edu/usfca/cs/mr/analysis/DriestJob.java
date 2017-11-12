@@ -16,8 +16,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 
 /**
  * Created by zzc on 11/3/17.
@@ -57,10 +59,14 @@ public class DriestJob {
         protected void reduce(IntWritable key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException {
             Iterator<DoubleWritable> iterator = values.iterator();
             Double humidity = 0.0;
+            Double avgHumidity;
+            long count = 0;
             while (iterator.hasNext()) {
                 humidity += iterator.next().get();
+                count++;
             }
-            context.write(key, new DoubleWritable(humidity));
+            avgHumidity = humidity / count;
+            context.write(key, new DoubleWritable(avgHumidity));
         }
     }
 
@@ -75,22 +81,44 @@ public class DriestJob {
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             Iterator<Text> iterator = values.iterator();
-            int month = 0;
-            double humidity = Double.MAX_VALUE;
-
+            PriorityQueue<Node> driestQueue = new PriorityQueue<Node>(12, new HumidityComparator());
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                int monthTemp = Integer.parseInt(value.split("\t")[0]);
-                double humidityTemp = Double.parseDouble(value.split("\t")[1]);
-                if (humidityTemp < humidity) {
-                    month = monthTemp;
-                    humidity = humidityTemp;
-                }
+                int month = Integer.parseInt(value.split("\t")[0]);
+                double humidity = Double.parseDouble(value.split("\t")[1]);
+
+
+                Node node = new Node(month, humidity);
+                driestQueue.offer(node);
             }
-            context.write(new Text(String.valueOf(month)), new Text(String.valueOf(humidity)));
+            while (!driestQueue.isEmpty()) {
+                Node node = driestQueue.poll();
+                context.write(new Text(String.valueOf(node.month)), new Text(String.valueOf(node.avgHumidity)));
+            }
+
         }
     }
 
+    private static class Node {
+        private int month;
+        private double avgHumidity;
+        public Node(int month, double humidity) {
+            this.month = month;
+            this.avgHumidity = humidity;
+        }
+    }
+
+    private static class HumidityComparator implements Comparator<Node> {
+        public int compare(Node a, Node b) {
+            if (a.avgHumidity < b.avgHumidity) {
+                return 1;
+            } else if (a.avgHumidity > b.avgHumidity) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
           try {
@@ -98,7 +126,7 @@ public class DriestJob {
                 Job job1 = Job.getInstance(conf, "Driest Job1");
                 job1.setJarByClass(DriestJob.class);
                 job1.setMapperClass(DriestMapper1.class);
-                job1.setCombinerClass(DriestReducer1.class);
+//                job1.setCombinerClass(DriestReducer1.class);
                 job1.setReducerClass(DriestReducer1.class);
 
                 job1.setMapOutputKeyClass(IntWritable.class);

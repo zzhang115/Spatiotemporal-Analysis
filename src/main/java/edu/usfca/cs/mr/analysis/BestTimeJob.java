@@ -1,6 +1,5 @@
 package edu.usfca.cs.mr.analysis;
 
-import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -13,24 +12,20 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.PriorityQueue;
-import java.util.concurrent.locks.Condition;
+import java.util.*;
 
 /**
  * Created by zzc on 11/3/17.
  */
 
 public class BestTimeJob {
-    private static final float TEMPERATURE = (float) 70.0; // 20 to 22 °C (68 to 72 °F).
-    private static final float HUMIDITY = (float) 55; // 50% to 60%
+    private static final double TEMPERATURE = (float) 70.0; // 20 to 22 °C (68 to 72 °F).
+    private static final double HUMIDITY = (float) 55; // 50% to 60%
     // https://en.wikipedia.org/wiki/Room_temperature
     // https://en.wikipedia.org/wiki/Relative_humidity
     
-    private static float comfortLevel(float temperature, float humidity) {
-        float totalDifference = (float) 0.0;
+    private static double comfortLevel(double temperature, double humidity) {
+        double totalDifference = 0.0;
         totalDifference += Math.abs((temperature - TEMPERATURE)) / TEMPERATURE;
         totalDifference += Math.abs((humidity- HUMIDITY)) / HUMIDITY;
         return totalDifference;
@@ -39,17 +34,20 @@ public class BestTimeJob {
     private static class RegionCondition {
         private String geohash;
         private int month;
-        private float temperature;
-        private float humidity;
-        private float comfort;
+        private double temperature;
+        private double humidity;
+        private double comfort;
+        private double score;
 
-        public RegionCondition(String geohash, int month, float temperature, float humidity) {
+        public RegionCondition(String geohash, int month, double temperature, double humidity,
+                               double variance) {
             this.geohash = geohash;
             this.month = month;
             this.temperature = (float) (9 / 5) * (temperature - (float) 273.15) + 32;
 //            this.temperature = temperature - (float) 273.15;
             this.humidity = humidity;
             this.comfort = comfortLevel(this.temperature, this.humidity);
+            this.score = variance + this.comfort;
         }
 
         @Override
@@ -63,9 +61,9 @@ public class BestTimeJob {
 
     private static class ConditionComparator implements Comparator<RegionCondition> {
         public int compare(RegionCondition a, RegionCondition b) {
-            if (a.comfort < b.comfort) {
+            if (a.score < b.score) {
                 return 1;
-            } else if (a.comfort > b.comfort) {
+            } else if (a.score > b.score) {
                 return -1;
             } else {
                 return 0;
@@ -91,22 +89,38 @@ public class BestTimeJob {
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             Iterator<Text> iterator = values.iterator();
-            float totalHumidity = (float) 0.0;
-            float totalTemperature = (float) 0.0;
-            float averageHumdity;
-            float averageTemperature;
+            double totalHumidity = 0.0;
+            double totalTemperature = 0.0;
+            double averageHumdity;
+            double averageTemperature;
+            double humidityVariance = 0.0;
+            double temperatureVariance = 0.0;
+            List<Double> humiditys = new ArrayList<Double>();
+            List<Double> temperatures = new ArrayList<Double>();
+
             long count = 0;
             while (iterator.hasNext()) {
                 String value = iterator.next().toString();
-                float humidity = Float.parseFloat(value.split("&")[0]);
-                float temperature = Float.parseFloat(value.split("&")[1]);
+                double humidity = Double.parseDouble(value.split("&")[0]);
+                double temperature = Double.parseDouble(value.split("&")[1]);
+                humiditys.add(humidity);
+                temperatures.add(temperature);
                 totalHumidity += humidity;
                 totalTemperature += temperature;
                 count++;
             }
             averageHumdity = totalHumidity / count;
             averageTemperature = totalTemperature / count;
-            context.write(key, new Text(averageHumdity + "&" + averageTemperature));
+
+            for (int i = 0; i < count; i++) {
+                humidityVariance += Math.pow((humiditys.get(i) - averageHumdity), 2);
+                temperatureVariance += Math.pow((temperatures.get(i) - averageTemperature), 2);
+            }
+//            System.out.println(humidityVariance + " : " + temperatureVariance + " " + count);
+            humidityVariance /= count;
+            temperatureVariance /= count;
+            context.write(key, new Text(averageHumdity + "&" + averageTemperature + "&" +
+            humidityVariance + "&" + temperatureVariance));
         }
     }
 
@@ -129,16 +143,21 @@ public class BestTimeJob {
 
                 String geohash = array[0].split("&")[0];
                 int month= Integer.parseInt(array[0].split("&")[1]);
-                float averageHumidity = Float.parseFloat(array[1].split("&")[0]);
-                float averageTemperature = Float.parseFloat(array[1].split("&")[1]);
-                System.out.println(geohash + " " +month + " " +averageHumidity + " " +averageTemperature);
+                double averageHumidity = Double.parseDouble(array[1].split("&")[0]);
+                double averageTemperature = Double.parseDouble(array[1].split("&")[1]);
+                double humidityVariance = Double.parseDouble(array[1].split("&")[2]);
+                double temperatureVariance = Double.parseDouble(array[1].split("&")[3]);
 
-                RegionCondition regionCondition = new RegionCondition(geohash, month, averageTemperature, averageHumidity);
+//                System.out.println(geohash + " " +month + " " +averageHumidity + " " +averageTemperature + " " +
+//                        humidityVariance + " " + temperatureVariance);
+
+                RegionCondition regionCondition = new RegionCondition(geohash, month,
+                        averageTemperature, averageHumidity, humidityVariance + temperatureVariance);
                 if (!queue.contains(regionCondition)) {
                     if (queue.size() < 5) {
                         queue.offer(regionCondition);
                     } else {
-                        if (regionCondition.comfort < queue.peek().comfort) {
+                        if (regionCondition.score < queue.peek().score) {
                             queue.poll();
                             queue.offer(regionCondition);
                         }
@@ -150,7 +169,7 @@ public class BestTimeJob {
             while (!queue.isEmpty()) {
                 RegionCondition condition = queue.poll();
                 context.write(new Text(condition.geohash + " " + condition.month), 
-                        new Text(condition.humidity + " " + condition.temperature + " " + condition.comfort));
+                        new Text(condition.humidity + " " + condition.temperature + " " + condition.score));
                 
             }
         }
@@ -163,7 +182,7 @@ public class BestTimeJob {
                 Job job1 = Job.getInstance(conf, "BestTime Job1");
                 job1.setJarByClass(BestTimeJob.class);
                 job1.setMapperClass(BestTimeMapper1.class);
-                job1.setCombinerClass(BestTimeReducer1.class);
+//                job1.setCombinerClass(BestTimeReducer1.class);
                 job1.setReducerClass(BestTimeReducer1.class);
 
                 job1.setMapOutputKeyClass(Text.class);

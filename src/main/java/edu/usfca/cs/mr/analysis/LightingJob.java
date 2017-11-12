@@ -111,7 +111,7 @@ public class LightingJob {
             Job job1 = Job.getInstance(conf, "Lighting Job1");
             job1.setJarByClass(LightingJob.class);
             job1.setMapperClass(LightingMapper1.class);
-            job1.setCombinerClass(LightingReducer1.class);
+//            job1.setCombinerClass(LightingReducer1.class);
             job1.setReducerClass(LightingReducer1.class);
 
             job1.setMapOutputKeyClass(Text.class);
