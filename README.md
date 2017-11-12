@@ -20,7 +20,8 @@ Important: many of the questions are answered with a time or location. You shoul
 * time: 14 mins;<br>
 
 #### [0.5 pt] Are there any Geohashes that have snow depths greater than zero for the entire year? List some of the top Geohashes.<br>
-  
+>There are totally 3 Geohashes that have snow depths greater than zero every month for the entire year.
+* 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
 
 ### Analysis
