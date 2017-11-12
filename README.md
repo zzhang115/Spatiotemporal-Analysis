@@ -27,16 +27,16 @@ Important: many of the questions are answered with a time or location. You shoul
 * c41xurr50ypb	590.09
 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
-* d5f0jqerq27b Aug 23 2015 89.52
-* d5f0vd8eb80p Aug 22 2015 89.49
-* 9g77js659k20 Apr 27 2015 89.45(anomaly)
-* d5f0jqerq27b Aug 08 2015 89.39
-* d59d5yttuc5b Aug 26 2015 89.33
-* d59eqv7e03pb Aug 26 2015 89.21
-* d59dntd726gz Aug 26 2015 89.08
-* d59eqv7e03pb Aug 27 2015 89.07
-* d5f04xyhucez Jul 30 2015 89.03
-* d5dpds10m55b Aug 13 2015 89.00
+* d5f0jqerq27b Aug 23 2015 89.52ºF
+* d5f0vd8eb80p Aug 22 2015 89.49ºF
+* 9g77js659k20 Apr 27 2015 89.45ºF(anomaly)
+* d5f0jqerq27b Aug 08 2015 89.39ºF
+* d59d5yttuc5b Aug 26 2015 89.33ºF
+* d59eqv7e03pb Aug 26 2015 89.21ºF
+* d59dntd726gz Aug 26 2015 89.08ºF
+* d59eqv7e03pb Aug 27 2015 89.07ºF
+* d5f04xyhucez Jul 30 2015 89.03ºF
+* d5dpds10m55b Aug 13 2015 89.00ºF
 
 
 
@@ -47,6 +47,10 @@ Important: many of the questions are answered with a time or location. You shoul
 9g3m	713.0
 
 #### [1.5 pt] What is the driest month in the bay area? This should include a histogram with data from each month. (Note: how did you determine what data points are in the bay area?)<br>
+Bay area latitute range: 37.265 ~ 38.505
+Bay area longitute range: -123.041 ~ -121.624
+
+
 #### [3 pt] After graduating from USF, you found a startup that aims to provide personalized travel itineraries using big data analysis. Given your own personal preferences, build a plan for a year of travel across 5 locations. Or, in other words: pick 5 regions. What is the best time of year to visit them based on the dataset?<br>
 #### [3 pt] Your travel startup is so successful that you move on to green energy; here, you want to help power companies plan out the locations of solar and wind farms across North America. Write a MapReduce job that locates the top 3 places for solar and wind farms, as well as a combination of both (solar + wind farm). You will report a total of 9 Geohashes as well as their relevant attributes (for example, cloud cover and wind speeds).<br>
 If you’d like to do some data fusion to answer this question, the maps here and here might be helpful.
