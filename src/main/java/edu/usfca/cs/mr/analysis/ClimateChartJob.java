@@ -12,10 +12,11 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 import java.util.Iterator;
+
+import static com.google.common.base.Ascii.SI;
 
 /**
  * Created by zzc on 11/3/17.
@@ -36,14 +37,13 @@ public class ClimateChartJob {
             int month = date.getMonth();
 
             if (geoHash.startsWith(geoPrefix)) {
-                System.out.println(geoHash + "&" +temperature + "&" + precipitation);
-
+//                System.out.println(geoHash + "&" +temperature + "&" + precipitation);
                 context.write(new IntWritable(month), new Text(temperature + "&" + precipitation));
             }
         }
     }
 
-    public static class ClimateChartReducer1 extends Reducer<IntWritable, Text, IntWritable, Text> {
+    public static class ClimateChartReducer1 extends Reducer<IntWritable, Text, Text, Text> {
         @Override
         protected void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             Iterator<Text> iterator = values.iterator();
@@ -70,15 +70,16 @@ public class ClimateChartJob {
                 count++;
             }
             avgTemperature = totalTemperature / count;
-            avgTemperature = (9 / 5) * (avgTemperature - 273.15) + 32;
-            maxTemperature = (9 / 5) * (maxTemperature - 273.15) + 32;
-            minTemperature = (9 / 5) * (minTemperature - 273.15) + 32;
-
             avgPrecipitation = totalPrecipitation / count;
-            System.out.println(key.get() + ":" + maxTemperature + "&" + minTemperature +
-                    "&" + avgPrecipitation + "&" + avgTemperature);
-            context.write(new IntWritable(key.get() + 1), new Text(maxTemperature + "\t" + minTemperature +
-            "\t" + avgPrecipitation + "\t" + avgTemperature));
+//            System.out.println(key.get() + ":" + maxTemperature + "&" + minTemperature +
+//                    "&" + avgPrecipitation + "&" + avgTemperature);
+            int month = key.get() + 1;
+            String monthStr = String.valueOf(month);
+            monthStr = month < 10 ? "0" + month : monthStr;
+
+            context.write(new Text(monthStr), new Text(String.format("%.5f", maxTemperature) + " " +
+                    String.format("%.5f", minTemperature) + " " + String.format("%.0f", avgPrecipitation) +
+                    " " + String.format("%.3f", avgTemperature)));
         }
     }
 
@@ -94,7 +95,7 @@ public class ClimateChartJob {
                 job1.setMapOutputKeyClass(IntWritable.class);
                 job1.setMapOutputValueClass(Text.class);
 
-                job1.setOutputKeyClass(IntWritable.class);
+                job1.setOutputKeyClass(Text.class);
                 job1.setOutputValueClass(Text.class);
 
                 File output1 = new File(args[1]);
@@ -109,7 +110,20 @@ public class ClimateChartJob {
                 FileOutputFormat.setOutputPath(job1, new Path(args[1]));
                 job1.waitForCompletion(true);
 
-              System.exit(0);
+                BufferedReader br = new BufferedReader(new FileReader(args[1] + "part-r-00000"));
+                StringBuffer result = new StringBuffer();
+                String line;
+                while( (line = br.readLine()) != null){
+                    result.append(line + "\n");
+                }
+                result.insert(0, "# Snowmass Village, CO (SI Units)\n");
+
+                File output = new File("output_climate2/climate-data.clim");
+                FileWriter fileWriter = new FileWriter(output);
+                fileWriter.write(result.toString());
+                fileWriter.flush();
+                fileWriter.close();
+                System.exit(0);
           } catch (IOException e) {
             System.err.println(e.getMessage());
           } catch (InterruptedException e) {
