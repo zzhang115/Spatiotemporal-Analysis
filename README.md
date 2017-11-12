@@ -27,6 +27,16 @@ Important: many of the questions are answered with a time or location. You shoul
 * c41xurr50ypb	590.09
 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
+d5dpds10m55b	Thu Aug 13 11:00:00 PDT 2015&88.99990000000003
+d5f04xyhucez	Thu Jul 30 11:00:00 PDT 2015&89.02993000000004
+d59eqv7e03pb	Thu Aug 27 11:00:00 PDT 2015&89.07070000000004
+d59dntd726gz	Wed Aug 26 11:00:00 PDT 2015&89.08193
+d59eqv7e03pb	Wed Aug 26 11:00:00 PDT 2015&89.20693
+d59d5yttuc5b	Wed Aug 26 11:00:00 PDT 2015&89.33193
+d5f0jqerq27b	Sat Aug 08 11:00:00 PDT 2015&89.38662000000005
+9g77js659k20	Mon Apr 27 11:00:00 PDT 2015&89.4545
+d5f0vd8eb80p	Sat Aug 22 11:00:00 PDT 2015&89.49062000000004
+d5f0jqerq27b	Sun Aug 23 11:00:00 PDT 2015&89.52432000000005
 
 ### Analysis
 #### [1 pt] Where are you most likely to be struck by lightning? Use a precision of 4 Geohash characters and provide the top 3 locations.<br>
