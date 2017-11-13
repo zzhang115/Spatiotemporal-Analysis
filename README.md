@@ -64,6 +64,22 @@ Bay area longitute range: -123.041 ~ -121.624
 2	22.470802919708028
 
 #### [3 pt] After graduating from USF, you found a startup that aims to provide personalized travel itineraries using big data analysis. Given your own personal preferences, build a plan for a year of travel across 5 locations. Or, in other words: pick 5 regions. What is the best time of year to visit them based on the dataset?<br>
+9qp149kn2e00 7	54.483870967741936 69.4483161035156 0.017265362744079686
+9mp98crhtpsp 7	55.666666666666664 69.66265177018232 0.01694047254717891
+9mxpvc16v9up 7	54.31578947368421 69.74930347193686 0.016021570359890415
+9sk0q7w7mk20 5	55.411764705882355 70.57787639763325 0.015742008125089205
+9mzmn28hh2rz 7	54.67741935483871 69.45985384545122 0.013581476275707282
+9mrzpu9heg5b 7	55.32258064516129 69.47029610351564 0.013432301160501346
+9mzdn5cv0u2p 7	54.885714285714286 70.62172724637276 0.010959739883247168
+9t2pf6ch8e00 7	54.63333333333333 69.74523677018232 0.01030614137834787
+9mzsxkvt3xkp 7	55.096774193548384 69.44255126480596 0.009723084151703712
+9w00h5teqfh0 7	54.714285714285715 70.29457896065861 0.009403076061356774
+9tbkp9fs6r7z 7	54.74285714285714 69.7059849606585 0.008875539523060472
+9tbm0upts7rz 7	54.892857142857146 69.57050896065846 0.008083638224359637
+9t2ne52xteb0 7	54.78378378378378 69.73758880621835 0.007679935270941743
+9mrvnncq9psp 7	54.97142857142857 69.77796381780138 0.0036914259794608916
+9mz8hq3vvw5b 7	54.925 69.85724510351565 0.0034029920276985315
+
 #### [3 pt] Your travel startup is so successful that you move on to green energy; here, you want to help power companies plan out the locations of solar and wind farms across North America. Write a MapReduce job that locates the top 3 places for solar and wind farms, as well as a combination of both (solar + wind farm). You will report a total of 9 Geohashes as well as their relevant attributes (for example, cloud cover and wind speeds).<br>
 If you’d like to do some data fusion to answer this question, the maps here and here might be helpful.
 #### [3 pt] Given a Geohash prefix, create a climate chart for the region. This includes high, low, and average temperatures, as well as monthly average rainfall (precipitation). Here’s a (poor quality) script that will generate this for you.<br>
