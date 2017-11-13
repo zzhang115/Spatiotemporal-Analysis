@@ -25,6 +25,7 @@ Important: many of the questions are answered with a time or location. You shoul
 * c1gyqex11wpb	204.93
 * c1p5fmbjmkrz	331.10
 * c41xurr50ypb	590.09
+![](/images/snow0.png)
 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
 * d5f0jqerq27b Aug 23 2015 89.52ºF
