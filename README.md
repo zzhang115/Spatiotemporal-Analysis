@@ -21,10 +21,13 @@ Important: many of the questions are answered with a time or location. You shoul
 
 #### [0.5 pt] Are there any Geohashes that have snow depths greater than zero for the entire year? List some of the top Geohashes.<br>
 >There are totally 3 Geohashes that have snow depths greater than zero every month for the entire year.<br>
-`Geohash        SnowDepth(Total depth for the entire year)`
-* c1gyqex11wpb	204.93
-* c1p5fmbjmkrz	331.10
-* c41xurr50ypb	590.09
+SnowDepth: 590.09
+![](/images/snow0.png)
+SnowDepth: 331.10
+![](/images/snow1.png)
+SnowDepth: 204.93
+![](/images/snow2.png)
+* time: 24 mins;<br>
 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
 * d5f0jqerq27b Aug 23 2015 89.52ºF
