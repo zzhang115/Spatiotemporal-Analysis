@@ -82,7 +82,22 @@ Region4: Geohash: 9sk0q7w7mk20 Month: Aug Temperature: 70.57ºF Humidity: 55.41<
 
 #### [3 pt] Your travel startup is so successful that you move on to green energy; here, you want to help power companies plan out the locations of solar and wind farms across North America. Write a MapReduce job that locates the top 3 places for solar and wind farms, as well as a combination of both (solar + wind farm). You will report a total of 9 Geohashes as well as their relevant attributes (for example, cloud cover and wind speeds).<br>
 
-Location0: Geohash: 9tbm0upts7rz Month: Aug Temperature: 69.57ºF Humidity: 54.89<br>![](/images/region2.png)<br><br>
+Best top3 solar locations:<br><br>
+Location0: Geohash: d4u024xzzyp6 windSpeed: 33.75 cloudCover: 8.81<br>![](/images/solar0.png)<br><br>
+Location1: Geohash: d4f8x4ryxfpy windSpeed: 28.30 cloudCover: 8.81<br>![](/images/solar1.png)<br><br>
+Location2: Geohash: d4g34rxuxcrf windSpeed: 31.03 cloudCover: 8.82<br>![](/images/solar2.png)<br><br>
+
+Best top3 wind locations:<br><br>
+Location0: Geohash: b33p2txurcru windSpeed: 91.81 cloudCover: 31.22<br>![](/images/wind0.png)<br><br>
+Location1: Geohash: b33pgbbfrcxv windSpeed: 91.76 cloudCover: 31.22<br>![](/images/wind1.png)<br><br>
+Location2: Geohash: b392r64gpbpz windSpeed: 91.68 cloudCover: 31.22<br>![](/images/wind2.png)<br><br>
+
+Best top3 wind and solar locations:<br><br>
+Location0: Geohash: d7mf7qxtqx0p score: 74.33 windSpeed: 86.02 cloudCover: 11.68<br>![](/images/solarwind0.png)<br><br>
+Location1: Geohash: d7mg1mu0rm8p score: 73.36 windSpeed: 84.61 cloudCover: 11.24<br>![](/images/solarwind1.png)<br><br>
+Location2: Geohash: d7mg5fny3ju0 score: 73.08 windSpeed: 84.90 cloudCover: 11.82<br>![](/images/solarwind2.png)<br><br>
+
+
 Best top3 wind locations(b8y3qv0w5tpb	 windSpeed: 91.68159203980099 cloudCover: 31.220542120339214)
 Best top3 wind locations(bbg9cjph0zzz	 windSpeed: 91.76666666666667 cloudCover: 31.090935619640224)
 Best top3 wind locations(ff4q0qxpvtfp	 windSpeed: 91.8177570093458 cloudCover: 24.734036081061706)
