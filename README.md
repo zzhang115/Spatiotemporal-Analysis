@@ -114,6 +114,20 @@ Best top3 wind and solar locations(79.69323435804536 d7mf7qxtqx0p	 windSpeed: 91
 
 If you’d like to do some data fusion to answer this question, the maps here and here might be helpful.
 #### [3 pt] Given a Geohash prefix, create a climate chart for the region. This includes high, low, and average temperatures, as well as monthly average rainfall (precipitation). Here’s a (poor quality) script that will generate this for you.<br>
+9e
+01	320.93088 270.66653 30 297.045
+02	321.85590 269.29870 25 297.143
+03	324.72710 273.11950 25 297.684
+04	327.48755 275.69708 29 299.053
+05	328.35962 275.74610 34 299.776
+06	328.28564 280.97998 42 300.202
+07	327.59595 278.61230 46 300.750
+08	329.07056 277.55640 48 301.538
+09	327.36328 277.06080 49 301.424
+10	325.36450 274.46167 43 300.909
+11	322.37085 273.94458 39 299.865
+12	320.88922 270.73184 31 298.557
+
 
 ## Deliverable II
 
