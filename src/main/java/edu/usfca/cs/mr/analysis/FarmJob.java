@@ -72,7 +72,7 @@ public class FarmJob {
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             Iterator<Text> iterator = values.iterator();
 
-            int queueSize = 3;
+            int queueSize = 10;
             PriorityQueue<Node> windQueue = new PriorityQueue<Node>(3, new WindComparator());
             PriorityQueue<Node> cloudQueue = new PriorityQueue<Node>(3, new CloudComparator());
             PriorityQueue<Node> windcloudQueue = new PriorityQueue<Node>(3, new WindCloudComparator());

@@ -23,7 +23,7 @@ import static com.google.common.base.Ascii.SI;
  */
 
 public class ClimateChartJob {
-    private static String geoPrefix = "9e";
+    private static String geoPrefix = "9mzs";
 
     public static class ClimateChartMapper1 extends Mapper<LongWritable, Text, IntWritable, Text> {
         @Override
