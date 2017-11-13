@@ -81,6 +81,37 @@ Bay area longitute range: -123.041 ~ -121.624
 9mz8hq3vvw5b 7	54.925 69.85724510351565 0.0034029920276985315
 
 #### [3 pt] Your travel startup is so successful that you move on to green energy; here, you want to help power companies plan out the locations of solar and wind farms across North America. Write a MapReduce job that locates the top 3 places for solar and wind farms, as well as a combination of both (solar + wind farm). You will report a total of 9 Geohashes as well as their relevant attributes (for example, cloud cover and wind speeds).<br>
+Best top3 wind locations(b8y3qv0w5tpb	 windSpeed: 91.68159203980099 cloudCover: 31.220542120339214)
+Best top3 wind locations(bbg9cjph0zzz	 windSpeed: 91.76666666666667 cloudCover: 31.090935619640224)
+Best top3 wind locations(ff4q0qxpvtfp	 windSpeed: 91.8177570093458 cloudCover: 24.734036081061706)
+Best top3 wind locations(fdrmbc515u3z	 windSpeed: 91.82830626450117 cloudCover: 22.48643349850164)
+Best top3 wind locations(b8vfzfc3hpxb	 windSpeed: 92.03964757709251 cloudCover: 30.061841811021683)
+Best top3 wind locations(ff6236xb31mz	 windSpeed: 92.0525059665871 cloudCover: 25.939860474176673)
+Best top3 wind locations(ff4nvgrxr7eb	 windSpeed: 92.09004739336493 cloudCover: 24.90781194787133)
+Best top3 wind locations(bbsrkcdugyrz	 windSpeed: 92.23880597014926 cloudCover: 30.401073478187396)
+Best top3 wind locations(bc1d1ejqsq00	 windSpeed: 92.5575221238938 cloudCover: 29.919018215653793)
+Best top3 wind locations(bbsnrkwq3y00	 windSpeed: 92.67142857142858 cloudCover: 31.04971405936603)
+Best top3 solar locations(d5hcrwzdk8bp	 windSpeed: 31.030150753768844 cloudCover: 8.822445289180521)
+Best top3 solar locations(d5j29gczt0pb	 windSpeed: 28.305 cloudCover: 8.818374460993303)
+Best top3 solar locations(d551yv8hrdup	 windSpeed: 33.754901960784316 cloudCover: 8.81687091941489)
+Best top3 solar locations(d5h7n45shrzb	 windSpeed: 34.495098039215684 cloudCover: 8.808727826100379)
+Best top3 solar locations(d5hct0t4hf7z	 windSpeed: 30.92626728110599 cloudCover: 8.804341220283698)
+Best top3 solar locations(d55f5texe8b0	 windSpeed: 31.07 cloudCover: 8.779923077451695)
+Best top3 solar locations(d5h3jqzncczb	 windSpeed: 34.38805970149254 cloudCover: 8.767744590431228)
+Best top3 solar locations(d5h9j1yx2zgz	 windSpeed: 31.199029126213592 cloudCover: 8.750187557694463)
+Best top3 solar locations(d54spbbmfj7z	 windSpeed: 30.482758620689655 cloudCover: 8.734503092175396)
+Best top3 solar locations(d5j3uce9u4kp	 windSpeed: 25.672371638141808 cloudCover: 8.639475843702634)
+Best top3 wind and solar locations(73.0800333495097 d7mgcc7387u0	 windSpeed: 84.90602409638554 cloudCover: 11.82599074687583)
+Best top3 wind and solar locations(73.36739407720549 d7msh8muq27b	 windSpeed: 84.61574074074075 cloudCover: 11.248346663535258)
+Best top3 wind and solar locations(74.33902484180402 d7mkpx2sbfs0	 windSpeed: 86.02830188679245 cloudCover: 11.689277044988431)
+Best top3 wind and solar locations(74.5110886583303 d7meqc39uusp	 windSpeed: 85.86069651741293 cloudCover: 11.349607859082633)
+Best top3 wind and solar locations(74.53583366292553 d7ms45ghzcxz	 windSpeed: 85.63037974683544 cloudCover: 11.094546083909924)
+Best top3 wind and solar locations(74.81381000568938 d7mf8fjpqfup	 windSpeed: 86.36879432624113 cloudCover: 11.554984320551757)
+Best top3 wind and solar locations(75.4677318020792 d7mezkbe5yup	 windSpeed: 86.81323877068557 cloudCover: 11.345506968606374)
+Best top3 wind and solar locations(75.73276706230075 d7mg5fny3ju0	 windSpeed: 87.3679012345679 cloudCover: 11.635134172267149)
+Best top3 wind and solar locations(76.86046856457025 d7mg1mu0rm8p	 windSpeed: 88.04556962025316 cloudCover: 11.185101055682905)
+Best top3 wind and solar locations(79.69323435804536 d7mf7qxtqx0p	 windSpeed: 91.015 cloudCover: 11.321765641954636)
+
 If you’d like to do some data fusion to answer this question, the maps here and here might be helpful.
 #### [3 pt] Given a Geohash prefix, create a climate chart for the region. This includes high, low, and average temperatures, as well as monthly average rainfall (precipitation). Here’s a (poor quality) script that will generate this for you.<br>
 
