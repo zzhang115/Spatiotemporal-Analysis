@@ -29,8 +29,9 @@ public class FarmJob {
             double v_wind = Double.parseDouble(value.toString().split("\t")[51]);
             double windSpeed = Math.sqrt(Math.pow(u_wind, 2) + Math.pow(v_wind, 2));
             double cloudCover = Double.parseDouble(value.toString().split("\t")[16]);
+            double isLand = Double.parseDouble(value.toString().split("\t")[18]);
 
-            if (cloudCover < 0) {
+            if (cloudCover < 0 || isLand < 1) {
                 return;
             }
             context.write(new Text(geoHash), new Text(windSpeed + "&" + cloudCover));

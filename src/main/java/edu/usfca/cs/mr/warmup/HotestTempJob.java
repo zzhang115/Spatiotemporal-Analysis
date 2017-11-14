@@ -41,11 +41,10 @@ public class HotestTempJob {
                 String timestamp = value.split("&")[0];
                 String geohash = value.split("&")[1];
 
-                temp = (9 / 5) * (temp - 273.15) + 32;
+                temp = ((double) 9 / 5) * (temp - 273.15) + 32;
 
                 Date date = new Date(Long.parseLong(timestamp));
                 String dateStr = date.toString();
-//                System.out.println(dateStr);
 
                 if (queue.size() < 10) {
                     queue.offer(new Node(geohash, dateStr, temp));
