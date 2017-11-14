@@ -25,9 +25,9 @@ SnowDepth: 204.93<br>![](/images/snow2.png)<br><br>
 
 #### [0.5 pt] When and where was the hottest temperature observed in the dataset? Is it an anomaly?<br>
 
-Aug 23 2015 Temp: 89.52ºF<br>![](/images/hotest0.png)<br><br>
-Aug 22 2015 Temp: 89.49ºF<br>![](/images/hotest1.png)<br><br>
-Apr 27 2015 Temp: 89.45ºF<br>![](/images/hotest2.png)<br><br>
+Aug 23 2015 Temp: 135.54ºF<br>![](/images/hotest0.png)<br><br>
+Aug 22 2015 Temp: 135.48ºF<br>![](/images/hotest1.png)<br><br>
+Apr 27 2015 Temp: 135.41ºF<br>![](/images/hotest2.png)<br><br>
 * time: 46 mins;<br> 
 
 ### Analysis
