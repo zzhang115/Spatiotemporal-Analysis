@@ -9,7 +9,7 @@ Project Specification: https://www.cs.usfca.edu/~mmalensek/courses/cs686/project
 The project specification defines several questions that you will answer with MapReduce jobs. You should edit this document (README.md) with your answers as you find them, including figures, references, etc. This will also serve as a way of tracking your progress through the milestones.
 
 ## Deliverable I
-`(All of my MapReduce job based on 30% dataset and ran on my local machine)`<br>
+`(All of my MapReduce job based on 30% dataset and ran on cluster)`<br>
 ### Warm-up
 
 #### [0.5 pt] How many records are in the dataset?<br>
